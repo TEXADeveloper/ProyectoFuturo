@@ -1,8 +1,10 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField, Range(0,10)] float speed;
+    [SerializeField, Range(0,10)] private float speed;
+    private PlayerController pController;
     private Rigidbody2D rb;
     private int horizontal;
     private int vertical;
@@ -14,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        pController = this.GetComponent<PlayerController>();
         rb = this.GetComponent<Rigidbody2D>();
     }
 
@@ -25,11 +28,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void setDirection()
     {
+        if (horizontal == 1 && pController.pCollision.GetCollisionType("Right") ||
+                horizontal == -1 && pController.pCollision.GetCollisionType("Left"))
+            horizontal = 0;
+        if (vertical == 1 && pController.pCollision.GetCollisionType("Up") ||
+                vertical == -1 && pController.pCollision.GetCollisionType("Down"))
+            vertical = 0;
         direction = new Vector2(horizontal, vertical).normalized;
     }
 
     private void move()
     {
-        rb.velocity = direction * speed;
+        if (pController.pTime != null && !pController.pTime.isFastTime)
+            transform.Translate(direction * speed * Time.unscaledDeltaTime);
     }
 }

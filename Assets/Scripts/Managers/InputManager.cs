@@ -26,4 +26,9 @@ public class InputManager : MonoBehaviour
     {
         pM.ReceiveInput("Vertical", int.Parse(value.Get().ToString()));
     }
+
+    void OnFastTime(InputValue value)
+    {
+        pM.ReceiveInput("FastTime", int.Parse(value.Get().ToString()));
+    }
 }

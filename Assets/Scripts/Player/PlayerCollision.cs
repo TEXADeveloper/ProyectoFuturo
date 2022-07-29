@@ -1,50 +1,56 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerCollision : MonoBehaviour
 {
     [SerializeField, Range(0f, 0.9f)] private float distance;
     [SerializeField] private LayerMask layer;
-    bool collisioned;
+    private Dictionary<string, bool> collisionType = new Dictionary<string, bool>(); 
+
+    public bool GetCollisionType(string key)
+    {
+        return collisionType[key];
+    }
+
+
+    void Start()
+    {
+        collisionType.Add("Up", false);
+        collisionType.Add("Down", false);
+        collisionType.Add("Left", false);
+        collisionType.Add("Right", false);
+    }
 
     void Update()
     {
-        collisioned = ShootRay();
-        Debug.Log(collisioned);
+        resetColisionValues();
+        shootRay();
     }
 
-    bool ShootRay()
+    private void resetColisionValues()
     {
-        bool shoots = false;
+        collisionType["Up"] = false;
+        collisionType["Down"] = false;
+        collisionType["Left"] = false;
+        collisionType["Right"] = false;
+    }
+
+    private void shootRay()
+    {
         for (int i = -1 ; i < 2 ; i++) //Up
-            shoots = shoots || Physics2D.Raycast(transform.position + new Vector3(0.5f * i, 0.5f), Vector2.up, distance, layer);
+            collisionType["Up"] = collisionType["Up"] ||
+                Physics2D.Raycast(transform.position + new Vector3(0.5f * i, 0.5f), Vector2.up, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++)//Down
-            shoots = shoots || Physics2D.Raycast(transform.position + new Vector3(0.5f * i, -0.5f), Vector2.down, distance, layer);
+            collisionType["Down"] = collisionType["Down"] ||
+                Physics2D.Raycast(transform.position + new Vector3(0.5f * i, -0.5f), Vector2.down, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++)//Left
-            shoots = shoots || Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0.5f * i), Vector2.left, distance, layer);
+            collisionType["Left"] = collisionType["Left"] ||
+                Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0.5f * i), Vector2.left, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++) //Right
-            shoots = shoots || Physics2D.Raycast(transform.position + new Vector3(0.5f, 0.5f * i), Vector2.right, distance, layer);
-        
-        return shoots;
+            collisionType["Right"] = collisionType["Right"] ||
+                Physics2D.Raycast(transform.position + new Vector3(0.5f, 0.5f * i), Vector2.right, distance, layer);
     }
-
-    /*
-    
-    (-0.5, 0.5f) -> Vector3.up, Vector3.left
-    (0.5, 0.5f) -> Vector3.up, Vector3.right
-    (-0.5, -0.5f) -> Vector3.down, Vector3.left
-    (0.5, -0.5f) -> Vector3.down, Vector3.right
-    
-    (0, 0.5f) -> Vector3.up
-    (0, -0.5f) -> Vector3.down
-    (-0.5, 0) -> Vector3.left
-    (0.5, 0) -> Vector3.right
-
-    |¯¯¯¯¯¯¯|
-    |       |
-    |_______|
-
-    */
 }

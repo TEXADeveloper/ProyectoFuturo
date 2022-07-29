@@ -21,6 +21,9 @@ public class PlayerManager : MonoBehaviour
             case "Vertical":
                 pController?.pMovement.SetVertical(value);
                 break;
+            case "FastTime":
+                pController?.pTime.Input(value);
+                break;
             default:
                 Debug.LogError("No se encuentra la key: " + key);
                 break;
