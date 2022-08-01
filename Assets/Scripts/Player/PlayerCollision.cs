@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class PlayerCollision : MonoBehaviour
 {
     [SerializeField, Range(0f, 0.9f)] private float distance;
+    [SerializeField, Range(0f, 0.9f)] private float radius;
     [SerializeField] private LayerMask layer;
     private Dictionary<string, bool> collisionType = new Dictionary<string, bool>(); 
 
@@ -39,18 +40,18 @@ public class PlayerCollision : MonoBehaviour
     {
         for (int i = -1 ; i < 2 ; i++) //Up
             collisionType["Up"] = collisionType["Up"] ||
-                Physics2D.Raycast(transform.position + new Vector3(0.5f * i, 0.5f), Vector2.up, distance, layer);
+                Physics2D.Raycast(transform.position + new Vector3(radius * i, radius), Vector2.up, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++)//Down
             collisionType["Down"] = collisionType["Down"] ||
-                Physics2D.Raycast(transform.position + new Vector3(0.5f * i, -0.5f), Vector2.down, distance, layer);
+                Physics2D.Raycast(transform.position + new Vector3(radius * i, -radius), Vector2.down, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++)//Left
             collisionType["Left"] = collisionType["Left"] ||
-                Physics2D.Raycast(transform.position + new Vector3(-0.5f, 0.5f * i), Vector2.left, distance, layer);
+                Physics2D.Raycast(transform.position + new Vector3(-radius, radius * i), Vector2.left, distance, layer);
 
         for (int i = -1 ; i < 2 ; i++) //Right
             collisionType["Right"] = collisionType["Right"] ||
-                Physics2D.Raycast(transform.position + new Vector3(0.5f, 0.5f * i), Vector2.right, distance, layer);
+                Physics2D.Raycast(transform.position + new Vector3(radius, radius * i), Vector2.right, distance, layer);
     }
 }

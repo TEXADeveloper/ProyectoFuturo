@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private CameraFollow cameraFollow;
+    private GameObject player;
     private PlayerController pController;
 
     void Start()
     {
         InputManager.IM?.SetPlayerManager(this);
+        SpawnPlayer();
         pController = player.GetComponent<PlayerController>();
+    }
+
+    private void SpawnPlayer()
+    {
+        player = GameObject.Instantiate(playerPrefab, spawnPoint.position, Quaternion.identity, this.transform);
+        cameraFollow.playerTransform = player.transform;
     }
 
     public void ReceiveInput(string key, int value)
