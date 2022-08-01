@@ -7,12 +7,14 @@ public class PlayerMovement : MonoBehaviour
     private PlayerController pController;
     private Rigidbody2D rb;
     private int horizontal;
+    private int horizontalInput;
     private int vertical;
+    private int verticalInput;
     private Vector2 direction;
 
-    public void SetHorizontal(int value) { horizontal = value; }
+    public void SetHorizontal(int value) { horizontalInput = value; }
 
-    public void SetVertical(int value) { vertical = value; }
+    public void SetVertical(int value) { verticalInput = value; }
 
     void Start()
     {
@@ -28,12 +30,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void setDirection()
     {
-        if (horizontal == 1 && pController.pCollision.GetCollisionType("Right") ||
-                horizontal == -1 && pController.pCollision.GetCollisionType("Left"))
+        if (horizontalInput == 1 && pController.pCollision.GetCollisionType("Right") ||
+                horizontalInput == -1 && pController.pCollision.GetCollisionType("Left"))
             horizontal = 0;
-        if (vertical == 1 && pController.pCollision.GetCollisionType("Up") ||
-                vertical == -1 && pController.pCollision.GetCollisionType("Down"))
+        else
+            horizontal = horizontalInput;
+        if (verticalInput == 1 && pController.pCollision.GetCollisionType("Up") ||
+                verticalInput == -1 && pController.pCollision.GetCollisionType("Down"))
             vertical = 0;
+        else
+            vertical = verticalInput;
+        
         direction = new Vector2(horizontal, vertical).normalized;
     }
 
