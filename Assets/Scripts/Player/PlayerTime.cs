@@ -15,6 +15,8 @@ public class PlayerTime : MonoBehaviour
     private bool passedTime;
     private Slider accelerationSlider;
     private Slider timeSlider;
+    private SliderAnimation accelerationSliderAnim;
+    private SliderAnimation timeSliderAnim;
     private int input;
 
     public void Input(int value) { input = value; }
@@ -23,9 +25,10 @@ public class PlayerTime : MonoBehaviour
     {
         accelerationSlider = GameObject.Find("SpeedSlider").GetComponent<Slider>();
         timeSlider = GameObject.Find("TimeSlider").GetComponent<Slider>();
+        accelerationSliderAnim = accelerationSlider.gameObject.GetComponent<SliderAnimation>();
+        timeSliderAnim = timeSlider.gameObject.GetComponent<SliderAnimation>();
         accelerationSlider.maxValue = maxAcceleration;
         timeSlider.minValue = maxTimeAccelerating * -1;
-        timeSlider.gameObject.SetActive(false);
     }
 
     void Update()
@@ -41,12 +44,9 @@ public class PlayerTime : MonoBehaviour
         if (input == 1 && !passedTime)
         {
             timeSlider.value = (timeAccelerating - Time.unscaledTime) * -1;
-            timeSlider.gameObject.SetActive(true);
-        } else 
-        {
-            timeSlider.value = 0f;
-            timeSlider.gameObject.SetActive(false);
-        }
+            timeSliderAnim.Trigger("In");
+        } else if (!timeSliderAnim.GetOut())
+            timeSliderAnim.Trigger("Out");
     }
 
     private void readInput()
@@ -66,6 +66,7 @@ public class PlayerTime : MonoBehaviour
             return;
         Time.timeScale += accelerationSpeed * Time.deltaTime;
         isFastTime = true;
+        accelerationSliderAnim.Trigger("In");
         accelerationSlider.value = Time.timeScale;
     }
 
@@ -78,6 +79,7 @@ public class PlayerTime : MonoBehaviour
             accelerationSlider.value = Time.timeScale;
             return;
         } 
+        accelerationSliderAnim.Trigger("Out");
         Time.timeScale = 1;
         passedTime = false;
     }
