@@ -4,7 +4,14 @@ using UnityEngine;
 public class move : MonoBehaviour
 {
     public LayerMask layer;
+    private float timeMultiplier = 1;
     int direction = 1;
+
+    public void SetMultiplier(float value)
+    {
+        timeMultiplier = value;
+    }
+    
     void Update()
     {
         bool collisionRight = Physics2D.Raycast(transform.position + new Vector3(0.5f, 0), Vector2.right, 0.5f, layer);
@@ -18,6 +25,6 @@ public class move : MonoBehaviour
 
 
 
-        transform.Translate(new Vector3(5f * direction * Time.deltaTime, 0, 0));
+        transform.Translate(new Vector3(5f * direction * Time.deltaTime * timeMultiplier, 0, 0));
     }
 }
