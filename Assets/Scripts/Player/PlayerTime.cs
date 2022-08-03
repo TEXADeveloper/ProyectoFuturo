@@ -1,10 +1,12 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PlayerTime : MonoBehaviour
 {
     [HideInInspector] public bool isFastTime = false;
+    [Header("General Settings")]
+        [SerializeField] private TimeArea timeArea;
     [Header("Speed Settings")]
         [SerializeField] private float maxAcceleration = 4f;
         [SerializeField] private float accelerationSpeed = 1f;
@@ -62,25 +64,27 @@ public class PlayerTime : MonoBehaviour
 
     private void accelerate()
     {
-        if (Time.timeScale > maxAcceleration)
+        if (timeArea.TimeMultiplier > maxAcceleration)
             return;
-        Time.timeScale += accelerationSpeed * Time.deltaTime;
+        timeArea.TimeMultiplier += accelerationSpeed * Time.deltaTime * timeArea.TimeMultiplier;
         isFastTime = true;
+        timeArea.gameObject.SetActive(true);
         accelerationSliderAnim.Trigger("In");
-        accelerationSlider.value = Time.timeScale;
+        accelerationSlider.value = timeArea.TimeMultiplier;
     }
 
     private void deaccelerate()
     {
-        if (Time.timeScale > 1)
+        if (timeArea.TimeMultiplier > 1)
         {
-            Time.timeScale -= deaccelerationSpeed * Time.deltaTime;
+            timeArea.TimeMultiplier -= deaccelerationSpeed * Time.deltaTime * timeArea.TimeMultiplier;
             isFastTime = false;
-            accelerationSlider.value = Time.timeScale;
+            accelerationSlider.value = timeArea.TimeMultiplier;
             return;
         } 
         accelerationSliderAnim.Trigger("Out");
-        Time.timeScale = 1;
+        timeArea.gameObject.SetActive(false);
+        timeArea.TimeMultiplier = 1;
         passedTime = false;
     }
 }
