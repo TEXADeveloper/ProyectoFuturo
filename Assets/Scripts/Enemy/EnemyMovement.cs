@@ -1,23 +1,25 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
     [SerializeField, Range(0,10)] private float speed;
-    private PlayerController pController;
+    private EnemyController eController;
+    private float timeMultiplier = 1;
     private int horizontal;
     private int horizontalInput;
     private int vertical;
     private int verticalInput;
     private Vector2 direction;
 
+
+    public void SetMultiplier(float value) { timeMultiplier = value; }
     public void SetHorizontal(int value) { horizontalInput = value; }
 
     public void SetVertical(int value) { verticalInput = value; }
 
     void Start()
     {
-        pController = this.GetComponent<PlayerController>();
+        eController = this.GetComponent<EnemyController>();
     }
 
     void Update()
@@ -28,13 +30,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void setDirection()
     {
-        if (horizontalInput == 1 && pController.pCollision.GetCollisionType("Right") ||
-                horizontalInput == -1 && pController.pCollision.GetCollisionType("Left"))
+        if (horizontalInput == 1 && eController.eCollision.GetCollisionType("Right") ||
+                horizontalInput == -1 && eController.eCollision.GetCollisionType("Left"))
             horizontal = 0;
         else
             horizontal = horizontalInput;
-        if (verticalInput == 1 && pController.pCollision.GetCollisionType("Up") ||
-                verticalInput == -1 && pController.pCollision.GetCollisionType("Down"))
+        if (verticalInput == 1 && eController.eCollision.GetCollisionType("Up") ||
+                verticalInput == -1 && eController.eCollision.GetCollisionType("Down"))
             vertical = 0;
         else
             vertical = verticalInput;
@@ -44,7 +46,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void move()
     {
-        if (pController.pTime != null && !pController.pTime.isFastTime)
-            transform.Translate(direction * speed * Time.unscaledDeltaTime);
+        transform.Translate(direction * speed * Time.deltaTime * timeMultiplier);
     }
 }

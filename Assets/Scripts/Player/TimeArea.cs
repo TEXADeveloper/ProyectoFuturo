@@ -4,12 +4,7 @@ using System.Collections.Generic;
 public class TimeArea : MonoBehaviour
 {
     [HideInInspector] public float TimeMultiplier;
-    private List<move> enemiesInArea = new List<move>();
-
-    public List<move> GetEnemiesList()
-    {
-        return enemiesInArea;
-    }
+    private List<EnemyMovement> enemiesInArea = new List<EnemyMovement>();
 
     void Update()
     {
@@ -18,30 +13,30 @@ public class TimeArea : MonoBehaviour
 
     private void SetEnemiesMultipliers()
     {
-        foreach (move enemy in enemiesInArea)
+        foreach (EnemyMovement enemy in enemiesInArea)
             enemy.SetMultiplier(TimeMultiplier);
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        move colMove = col.gameObject.GetComponent<move>();
-        if (colMove != null)
-            enemiesInArea.Add(colMove);
+        EnemyMovement colMovement = col.gameObject.GetComponent<EnemyMovement>();
+        if (colMovement != null)
+            enemiesInArea.Add(colMovement);
     }
 
     void OnTriggerExit2D(Collider2D col)
     {
-        move colMove = col.gameObject.GetComponent<move>();
-        if (colMove != null)
+        EnemyMovement colMovement = col.gameObject.GetComponent<EnemyMovement>();
+        if (colMovement != null)
         {
             RemoveMultiplier();
-            enemiesInArea.Remove(colMove);
+            enemiesInArea.Remove(colMovement);
         }
     }
 
     private void RemoveMultiplier()
     {
-        foreach (move enemy in enemiesInArea)
+        foreach (EnemyMovement enemy in enemiesInArea)
             enemy.SetMultiplier(1);
     }
 
