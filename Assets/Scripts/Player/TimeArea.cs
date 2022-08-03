@@ -5,7 +5,6 @@ public class TimeArea : MonoBehaviour
 {
     [HideInInspector] public float TimeMultiplier;
     private List<move> enemiesInArea = new List<move>();
-    private bool showTimeArea = false;
 
     public List<move> GetEnemiesList()
     {
