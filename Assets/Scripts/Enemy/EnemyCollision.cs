@@ -8,10 +8,7 @@ public class EnemyCollision : MonoBehaviour
     [SerializeField] private LayerMask layer;
     private Dictionary<string, bool> collisionType = new Dictionary<string, bool>(); 
 
-    public bool GetCollisionType(string key)
-    {
-        return collisionType[key];
-    }
+    public bool GetCollisionType(string key) { return collisionType[key]; }
 
 
     void Start()
